@@ -1,0 +1,209 @@
+/**
+ * Admin Styles
+ * 
+ * @package WP_WebOptimizer
+ * @since 2.0.0
+ */
+
+/* Container */
+.wpwo-admin-wrap {
+    margin-top: 20px;
+}
+
+.wpwo-admin-content {
+    margin-top: 20px;
+}
+
+/* Cards */
+.wpwo-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wpwo-card h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.wpwo-card h3 {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+/* Dashboard */
+.wpwo-dashboard {
+    display: grid;
+    gap: 20px;
+}
+
+.wpwo-quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.wpwo-stat-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.wpwo-stat-label {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.wpwo-stat-value {
+    font-size: 32px;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+/* Forms */
+.wpwo-settings-form {
+    max-width: 100%;
+}
+
+.wpwo-settings-form .form-table {
+    margin-top: 20px;
+}
+
+.wpwo-settings-form .form-table th {
+    width: 250px;
+    font-weight: 600;
+    padding: 15px 10px 15px 0;
+}
+
+.wpwo-settings-form .form-table td {
+    padding: 15px 10px;
+}
+
+.wpwo-settings-form .description {
+    margin-top: 8px;
+    color: #666;
+}
+
+.wpwo-settings-form input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.wpwo-settings-form input[type="number"],
+.wpwo-settings-form input[type="text"] {
+    padding: 6px 10px;
+    border: 1px solid #8c8f94;
+    border-radius: 3px;
+}
+
+/* Buttons */
+.wpwo-card .button {
+    margin-right: 10px;
+}
+
+.wpwo-card .button-primary {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.wpwo-card .button-primary:hover {
+    background: #135e96;
+    border-color: #135e96;
+}
+
+/* Navigation Tabs */
+.nav-tab-wrapper {
+    border-bottom: 1px solid #ccd0d4;
+    margin: 20px 0 0;
+}
+
+.nav-tab {
+    padding: 8px 16px;
+    margin: 0 4px -1px 0;
+}
+
+/* Loading State */
+.wpwo-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.wpwo-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #2271b1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Notifications */
+.wpwo-notice {
+    padding: 12px 20px;
+    margin: 20px 0;
+    border-left: 4px solid #00a32a;
+    background: #f0f6fc;
+    border-radius: 4px;
+}
+
+.wpwo-notice.error {
+    border-left-color: #d63638;
+    background: #fcf0f1;
+}
+
+.wpwo-notice.success {
+    border-left-color: #00a32a;
+    background: #f0f6fc;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .wpwo-quick-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .wpwo-settings-form .form-table th,
+    .wpwo-settings-form .form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .wpwo-settings-form .form-table th {
+        padding-bottom: 5px;
+    }
+}
+
+/* Utility Classes */
+.wpwo-mt-20 {
+    margin-top: 20px;
+}
+
+.wpwo-mb-20 {
+    margin-bottom: 20px;
+}
+
+.wpwo-text-center {
+    text-align: center;
+}
+
+.wpwo-text-muted {
+    color: #666;
+}
