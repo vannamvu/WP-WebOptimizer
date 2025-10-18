@@ -1,0 +1,396 @@
+/**
+ * WP WebOptimizer Pro - Admin Styles
+ *
+ * @package WP_WebOptimizer
+ * @since   1.0.0
+ */
+
+/* Main wrapper */
+.wpwo-admin-wrap {
+	max-width: 1400px;
+	margin: 20px auto;
+	padding: 0 20px;
+}
+
+/* Header */
+.wpwo-header {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: #fff;
+	padding: 30px;
+	border-radius: 8px;
+	margin-bottom: 30px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.wpwo-header h1 {
+	color: #fff;
+	font-size: 32px;
+	margin: 0 0 10px 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.wpwo-header h1 .dashicons {
+	font-size: 36px;
+	width: 36px;
+	height: 36px;
+}
+
+.wpwo-subtitle {
+	font-size: 16px;
+	margin: 10px 0;
+	opacity: 0.95;
+}
+
+.wpwo-author-info {
+	font-size: 14px;
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.wpwo-author-info a {
+	color: #fff;
+	text-decoration: underline;
+}
+
+/* Save notification */
+.wpwo-save-notification {
+	position: fixed;
+	top: 32px;
+	right: 20px;
+	background: #46b450;
+	color: #fff;
+	padding: 15px 20px;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	display: none;
+	align-items: center;
+	gap: 10px;
+	z-index: 9999;
+	animation: slideInRight 0.3s ease-out;
+}
+
+.wpwo-save-notification.show {
+	display: flex;
+}
+
+.wpwo-save-notification .dashicons {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}
+
+@keyframes slideInRight {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* Tabs */
+.wpwo-tabs-wrapper {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+.wpwo-tabs-nav {
+	display: flex;
+	background: #f9f9f9;
+	border-bottom: 2px solid #e0e0e0;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.wpwo-tab-link {
+	flex: 1;
+	min-width: 120px;
+	padding: 18px 20px;
+	text-align: center;
+	text-decoration: none;
+	color: #555;
+	font-weight: 500;
+	border-bottom: 3px solid transparent;
+	transition: all 0.3s ease;
+	white-space: nowrap;
+}
+
+.wpwo-tab-link:hover {
+	color: #667eea;
+	background: rgba(102, 126, 234, 0.05);
+}
+
+.wpwo-tab-link.active {
+	color: #667eea;
+	border-bottom-color: #667eea;
+	background: #fff;
+}
+
+/* Tab content */
+.wpwo-tabs-content {
+	padding: 30px;
+}
+
+.wpwo-tab-content {
+	display: none;
+}
+
+.wpwo-tab-content.active {
+	display: block;
+	animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.wpwo-tab-content h2 {
+	margin-top: 0;
+	margin-bottom: 20px;
+	color: #333;
+	font-size: 24px;
+	border-bottom: 2px solid #f0f0f0;
+	padding-bottom: 10px;
+}
+
+/* Dashboard grid */
+.wpwo-dashboard-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	margin-bottom: 30px;
+}
+
+.wpwo-card {
+	background: #f9f9f9;
+	padding: 20px;
+	border-radius: 8px;
+	border: 1px solid #e0e0e0;
+}
+
+.wpwo-card h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+	color: #333;
+	font-size: 18px;
+}
+
+.wpwo-metric {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 0;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.wpwo-metric:last-child {
+	border-bottom: none;
+}
+
+.wpwo-metric-label {
+	font-weight: 500;
+	color: #666;
+}
+
+.wpwo-metric-value {
+	font-weight: bold;
+	font-size: 18px;
+	padding: 5px 10px;
+	border-radius: 4px;
+}
+
+.wpwo-metric-value.good {
+	color: #46b450;
+	background: rgba(70, 180, 80, 0.1);
+}
+
+.wpwo-metric-value.needs-improvement {
+	color: #f0b849;
+	background: rgba(240, 184, 73, 0.1);
+}
+
+.wpwo-metric-value.poor {
+	color: #dc3232;
+	background: rgba(220, 50, 50, 0.1);
+}
+
+/* Form table */
+.wpwo-settings-table {
+	width: 100%;
+	max-width: 900px;
+}
+
+.wpwo-settings-table th {
+	font-weight: 600;
+	color: #333;
+	padding: 15px 10px 15px 0;
+	width: 250px;
+	vertical-align: top;
+}
+
+.wpwo-settings-table td {
+	padding: 15px 0;
+}
+
+.wpwo-settings-table .description {
+	margin-top: 8px;
+	color: #666;
+	font-style: italic;
+}
+
+/* Toggle switch */
+.wpwo-switch {
+	position: relative;
+	display: inline-block;
+	width: 54px;
+	height: 28px;
+}
+
+.wpwo-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.wpwo-slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	transition: 0.3s;
+	border-radius: 28px;
+}
+
+.wpwo-slider:before {
+	position: absolute;
+	content: "";
+	height: 20px;
+	width: 20px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	transition: 0.3s;
+	border-radius: 50%;
+}
+
+.wpwo-switch input:checked + .wpwo-slider {
+	background-color: #667eea;
+}
+
+.wpwo-switch input:checked + .wpwo-slider:before {
+	transform: translateX(26px);
+}
+
+/* Buttons */
+.wpwo-card .button {
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+/* Notices */
+.wpwo-notice {
+	padding: 15px;
+	margin: 20px 0;
+	border-radius: 4px;
+	border-left: 4px solid;
+}
+
+.wpwo-notice-warning {
+	background: #fff3cd;
+	border-color: #f0b849;
+	color: #856404;
+}
+
+.wpwo-notice p {
+	margin: 0;
+}
+
+/* Database info */
+.wpwo-database-info {
+	background: #f9f9f9;
+	padding: 20px;
+	border-radius: 8px;
+	margin-top: 20px;
+}
+
+.wpwo-database-info h3 {
+	margin-top: 0;
+}
+
+.wpwo-database-info ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.wpwo-database-info li {
+	padding: 8px 0;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.wpwo-database-info li:last-child {
+	border-bottom: none;
+}
+
+/* Export/Import */
+.wpwo-export-import {
+	margin-top: 30px;
+	padding: 20px;
+	background: #f9f9f9;
+	border-radius: 8px;
+}
+
+.wpwo-export-import h3 {
+	margin-top: 0;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+	.wpwo-header h1 {
+		font-size: 24px;
+	}
+
+	.wpwo-tabs-nav {
+		flex-direction: column;
+	}
+
+	.wpwo-tab-link {
+		min-width: 100%;
+	}
+
+	.wpwo-dashboard-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.wpwo-settings-table th,
+	.wpwo-settings-table td {
+		display: block;
+		width: 100%;
+	}
+
+	.wpwo-settings-table th {
+		padding-bottom: 5px;
+	}
+
+	.wpwo-settings-table td {
+		padding-top: 5px;
+		padding-bottom: 20px;
+	}
+}
