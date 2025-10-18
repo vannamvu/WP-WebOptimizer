@@ -52,27 +52,116 @@ $perf_stats = WPWO_Performance_Monitor::get_performance_stats();
 			<div id="tab-dashboard" class="wpwo-tab-content active">
 				<h2><?php echo esc_html__( 'Tổng quan hiệu suất', 'wp-weboptimizer' ); ?></h2>
 				
+				<!-- PageSpeed Test Section -->
+				<div class="wpwo-pagespeed-section">
+					<div class="wpwo-card">
+						<h3><?php echo esc_html__( 'PageSpeed Insights Test', 'wp-weboptimizer' ); ?></h3>
+						<p><?php echo esc_html__( 'Kiểm tra hiệu suất website trực tiếp với Google PageSpeed Insights', 'wp-weboptimizer' ); ?></p>
+						
+						<div class="wpwo-test-controls">
+							<div class="wpwo-test-strategy">
+								<label>
+									<input type="radio" name="test_strategy" value="mobile" checked>
+									<?php echo esc_html__( 'Mobile', 'wp-weboptimizer' ); ?>
+								</label>
+								<label>
+									<input type="radio" name="test_strategy" value="desktop">
+									<?php echo esc_html__( 'Desktop', 'wp-weboptimizer' ); ?>
+								</label>
+							</div>
+							<button type="button" class="button button-primary wpwo-test-now-btn">
+								<?php echo esc_html__( 'Test Now', 'wp-weboptimizer' ); ?>
+							</button>
+							<span class="wpwo-test-spinner" style="display:none;">
+								<span class="spinner is-active"></span>
+								<?php echo esc_html__( 'Đang test... (30-60s)', 'wp-weboptimizer' ); ?>
+							</span>
+						</div>
+
+						<div class="wpwo-test-results" style="display:none;">
+							<div class="wpwo-scores-grid">
+								<div class="wpwo-score-card">
+									<div class="wpwo-score-label"><?php echo esc_html__( 'Performance', 'wp-weboptimizer' ); ?></div>
+									<div class="wpwo-score-value" data-score="performance">-</div>
+								</div>
+								<div class="wpwo-score-card">
+									<div class="wpwo-score-label"><?php echo esc_html__( 'Accessibility', 'wp-weboptimizer' ); ?></div>
+									<div class="wpwo-score-value" data-score="accessibility">-</div>
+								</div>
+								<div class="wpwo-score-card">
+									<div class="wpwo-score-label"><?php echo esc_html__( 'Best Practices', 'wp-weboptimizer' ); ?></div>
+									<div class="wpwo-score-value" data-score="best-practices">-</div>
+								</div>
+								<div class="wpwo-score-card">
+									<div class="wpwo-score-label"><?php echo esc_html__( 'SEO', 'wp-weboptimizer' ); ?></div>
+									<div class="wpwo-score-value" data-score="seo">-</div>
+								</div>
+							</div>
+
+							<h4><?php echo esc_html__( 'Core Web Vitals (PageSpeed)', 'wp-weboptimizer' ); ?></h4>
+							<div class="wpwo-metrics-grid">
+								<div class="wpwo-metric-card">
+									<div class="wpwo-metric-name">FCP</div>
+									<div class="wpwo-metric-value-large" data-metric="fcp">-</div>
+									<div class="wpwo-metric-description"><?php echo esc_html__( 'First Contentful Paint', 'wp-weboptimizer' ); ?></div>
+								</div>
+								<div class="wpwo-metric-card">
+									<div class="wpwo-metric-name">LCP</div>
+									<div class="wpwo-metric-value-large" data-metric="lcp">-</div>
+									<div class="wpwo-metric-description"><?php echo esc_html__( 'Largest Contentful Paint', 'wp-weboptimizer' ); ?></div>
+								</div>
+								<div class="wpwo-metric-card">
+									<div class="wpwo-metric-name">CLS</div>
+									<div class="wpwo-metric-value-large" data-metric="cls">-</div>
+									<div class="wpwo-metric-description"><?php echo esc_html__( 'Cumulative Layout Shift', 'wp-weboptimizer' ); ?></div>
+								</div>
+								<div class="wpwo-metric-card">
+									<div class="wpwo-metric-name">TBT</div>
+									<div class="wpwo-metric-value-large" data-metric="tbt">-</div>
+									<div class="wpwo-metric-description"><?php echo esc_html__( 'Total Blocking Time', 'wp-weboptimizer' ); ?></div>
+								</div>
+								<div class="wpwo-metric-card">
+									<div class="wpwo-metric-name">SI</div>
+									<div class="wpwo-metric-value-large" data-metric="speed_index">-</div>
+									<div class="wpwo-metric-description"><?php echo esc_html__( 'Speed Index', 'wp-weboptimizer' ); ?></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Core Web Vitals (Real User Data) -->
 				<div class="wpwo-dashboard-grid">
 					<div class="wpwo-card">
-						<h3><?php echo esc_html__( 'Core Web Vitals', 'wp-weboptimizer' ); ?></h3>
-						<div class="wpwo-metric">
-							<div class="wpwo-metric-label">FCP (First Contentful Paint)</div>
-							<div class="wpwo-metric-value <?php echo $perf_stats['fcp_avg'] > 0 && $perf_stats['fcp_avg'] < 1800 ? 'good' : 'needs-improvement'; ?>">
-								<?php echo $perf_stats['fcp_avg'] > 0 ? number_format( $perf_stats['fcp_avg'], 0 ) . 'ms' : 'N/A'; ?>
+						<h3><?php echo esc_html__( 'Core Web Vitals (Người dùng thực)', 'wp-weboptimizer' ); ?></h3>
+						<p class="wpwo-card-description"><?php echo esc_html__( 'Dữ liệu thu thập từ người dùng thật truy cập website', 'wp-weboptimizer' ); ?></p>
+						<?php if ( $perf_stats['count'] > 0 ) : ?>
+							<div class="wpwo-metric">
+								<div class="wpwo-metric-label">FCP (First Contentful Paint)</div>
+								<div class="wpwo-metric-value <?php echo $perf_stats['fcp_avg'] > 0 && $perf_stats['fcp_avg'] < 1800 ? 'good' : ( $perf_stats['fcp_avg'] < 3000 ? 'needs-improvement' : 'poor' ); ?>">
+									<?php echo $perf_stats['fcp_avg'] > 0 ? number_format( $perf_stats['fcp_avg'], 0 ) . 'ms' : 'N/A'; ?>
+								</div>
 							</div>
-						</div>
-						<div class="wpwo-metric">
-							<div class="wpwo-metric-label">LCP (Largest Contentful Paint)</div>
-							<div class="wpwo-metric-value <?php echo $perf_stats['lcp_avg'] > 0 && $perf_stats['lcp_avg'] < 2500 ? 'good' : 'needs-improvement'; ?>">
-								<?php echo $perf_stats['lcp_avg'] > 0 ? number_format( $perf_stats['lcp_avg'], 0 ) . 'ms' : 'N/A'; ?>
+							<div class="wpwo-metric">
+								<div class="wpwo-metric-label">LCP (Largest Contentful Paint)</div>
+								<div class="wpwo-metric-value <?php echo $perf_stats['lcp_avg'] > 0 && $perf_stats['lcp_avg'] < 2500 ? 'good' : ( $perf_stats['lcp_avg'] < 4000 ? 'needs-improvement' : 'poor' ); ?>">
+									<?php echo $perf_stats['lcp_avg'] > 0 ? number_format( $perf_stats['lcp_avg'], 0 ) . 'ms' : 'N/A'; ?>
+								</div>
 							</div>
-						</div>
-						<div class="wpwo-metric">
-							<div class="wpwo-metric-label">CLS (Cumulative Layout Shift)</div>
-							<div class="wpwo-metric-value <?php echo $perf_stats['cls_avg'] >= 0 && $perf_stats['cls_avg'] < 0.1 ? 'good' : 'needs-improvement'; ?>">
-								<?php echo $perf_stats['cls_avg'] >= 0 ? number_format( $perf_stats['cls_avg'], 3 ) : 'N/A'; ?>
+							<div class="wpwo-metric">
+								<div class="wpwo-metric-label">CLS (Cumulative Layout Shift)</div>
+								<div class="wpwo-metric-value <?php echo $perf_stats['cls_avg'] >= 0 && $perf_stats['cls_avg'] < 0.1 ? 'good' : ( $perf_stats['cls_avg'] < 0.25 ? 'needs-improvement' : 'poor' ); ?>">
+									<?php echo $perf_stats['cls_avg'] >= 0 ? number_format( $perf_stats['cls_avg'], 3 ) : 'N/A'; ?>
+								</div>
 							</div>
-						</div>
+							<p class="wpwo-metric-info">
+								<small><?php echo sprintf( esc_html__( 'Dữ liệu từ %d lượt truy cập', 'wp-weboptimizer' ), $perf_stats['count'] ); ?></small>
+							</p>
+						<?php else : ?>
+							<div class="wpwo-notice wpwo-notice-info">
+								<p><?php echo esc_html__( '📊 Chưa có dữ liệu. Metrics sẽ được thu thập tự động khi có người dùng truy cập website (không tính admin). Hãy bật "Performance Monitor" trong tab Nâng cao.', 'wp-weboptimizer' ); ?></p>
+							</div>
+						<?php endif; ?>
 					</div>
 
 					<div class="wpwo-card">
@@ -87,6 +176,36 @@ $perf_stats = WPWO_Performance_Monitor::get_performance_stats();
 						<h3><?php echo esc_html__( 'Hành động nhanh', 'wp-weboptimizer' ); ?></h3>
 						<button type="button" class="button button-primary wpwo-clear-cache"><?php echo esc_html__( 'Xóa Cache', 'wp-weboptimizer' ); ?></button>
 						<button type="button" class="button button-secondary wpwo-optimize-db"><?php echo esc_html__( 'Tối ưu Database', 'wp-weboptimizer' ); ?></button>
+					</div>
+				</div>
+
+				<!-- Recommendations Section -->
+				<div class="wpwo-recommendations-section" style="display:none;">
+					<div class="wpwo-card">
+						<h3><?php echo esc_html__( 'Gợi ý tối ưu', 'wp-weboptimizer' ); ?></h3>
+						<div class="wpwo-recommendations-list"></div>
+					</div>
+				</div>
+
+				<!-- Test History Section -->
+				<div class="wpwo-test-history-section" style="display:none;">
+					<div class="wpwo-card">
+						<h3><?php echo esc_html__( 'Lịch sử Test', 'wp-weboptimizer' ); ?></h3>
+						<div class="wpwo-history-table-container">
+							<table class="wpwo-history-table">
+								<thead>
+									<tr>
+										<th><?php echo esc_html__( 'Thời gian', 'wp-weboptimizer' ); ?></th>
+										<th><?php echo esc_html__( 'Strategy', 'wp-weboptimizer' ); ?></th>
+										<th><?php echo esc_html__( 'Performance', 'wp-weboptimizer' ); ?></th>
+										<th><?php echo esc_html__( 'FCP', 'wp-weboptimizer' ); ?></th>
+										<th><?php echo esc_html__( 'LCP', 'wp-weboptimizer' ); ?></th>
+										<th><?php echo esc_html__( 'CLS', 'wp-weboptimizer' ); ?></th>
+									</tr>
+								</thead>
+								<tbody class="wpwo-history-body"></tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
