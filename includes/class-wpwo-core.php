@@ -68,6 +68,10 @@ class WPWO_Core {
 		require_once WPWO_PLUGIN_DIR . 'includes/modules/monitor/class-wpwo-performance-monitor.php';
 		require_once WPWO_PLUGIN_DIR . 'includes/modules/settings/class-wpwo-advanced-settings.php';
 
+		// Load PageSpeed and Analyzer classes
+		require_once WPWO_PLUGIN_DIR . 'includes/class-pagespeed-api.php';
+		require_once WPWO_PLUGIN_DIR . 'includes/class-performance-analyzer.php';
+
 		$this->loader = new WPWO_Loader();
 	}
 

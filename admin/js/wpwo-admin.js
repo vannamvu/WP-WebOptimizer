@@ -247,6 +247,207 @@
 				});
 			}
 		});
+
+		// PageSpeed Test Now button
+		$('.wpwo-test-now-btn').on('click', function() {
+			var $button = $(this);
+			var strategy = $('input[name="test_strategy"]:checked').val();
+			var url = window.location.origin;
+
+			// Show loading state
+			$button.prop('disabled', true);
+			$('.wpwo-test-spinner').show();
+			$('.wpwo-test-results').hide();
+			$('.wpwo-recommendations-section').hide();
+
+			$.ajax({
+				url: wpwoAjax.ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'wpwo_run_pagespeed_test',
+					nonce: wpwoAjax.nonce,
+					url: url,
+					strategy: strategy
+				},
+				timeout: 90000, // 90 seconds timeout
+				success: function(response) {
+					$button.prop('disabled', false);
+					$('.wpwo-test-spinner').hide();
+
+					if (response.success) {
+						displayTestResults(response.data.results);
+						displayRecommendations(response.data.recommendations);
+						loadTestHistory();
+						showNotification('Test hoàn tất thành công!', 'success');
+					} else {
+						showNotification('Lỗi: ' + response.data.message, 'error');
+					}
+				},
+				error: function(xhr, status, error) {
+					$button.prop('disabled', false);
+					$('.wpwo-test-spinner').hide();
+					
+					var errorMsg = 'Không thể kết nối với PageSpeed API. ';
+					if (status === 'timeout') {
+						errorMsg += 'Request timeout. Vui lòng thử lại.';
+					} else {
+						errorMsg += 'Vui lòng thử lại sau.';
+					}
+					showNotification(errorMsg, 'error');
+				}
+			});
+		});
+
+		// Display test results
+		function displayTestResults(results) {
+			if (!results) return;
+
+			$('.wpwo-test-results').show();
+
+			// Display scores
+			if (results.scores) {
+				$.each(results.scores, function(key, value) {
+					var $scoreEl = $('[data-score="' + key + '"]');
+					$scoreEl.text(value);
+					$scoreEl.removeClass('good needs-improvement poor');
+					if (value >= 90) {
+						$scoreEl.addClass('good');
+					} else if (value >= 50) {
+						$scoreEl.addClass('needs-improvement');
+					} else {
+						$scoreEl.addClass('poor');
+					}
+				});
+			}
+
+			// Display metrics
+			if (results.metrics) {
+				// FCP
+				if (results.metrics.fcp) {
+					var fcpSec = (results.metrics.fcp / 1000).toFixed(2);
+					$('[data-metric="fcp"]').text(fcpSec + 's')
+						.removeClass('good needs-improvement poor')
+						.addClass(results.metrics.fcp_rating || 'good');
+				}
+
+				// LCP
+				if (results.metrics.lcp) {
+					var lcpSec = (results.metrics.lcp / 1000).toFixed(2);
+					$('[data-metric="lcp"]').text(lcpSec + 's')
+						.removeClass('good needs-improvement poor')
+						.addClass(results.metrics.lcp_rating || 'good');
+				}
+
+				// CLS
+				if (results.metrics.cls !== undefined) {
+					$('[data-metric="cls"]').text(results.metrics.cls.toFixed(3))
+						.removeClass('good needs-improvement poor')
+						.addClass(results.metrics.cls_rating || 'good');
+				}
+
+				// TBT
+				if (results.metrics.tbt) {
+					$('[data-metric="tbt"]').text(results.metrics.tbt + 'ms')
+						.removeClass('good needs-improvement poor')
+						.addClass(results.metrics.tbt_rating || 'good');
+				}
+
+				// Speed Index
+				if (results.metrics.speed_index) {
+					var siSec = (results.metrics.speed_index / 1000).toFixed(2);
+					$('[data-metric="speed_index"]').text(siSec + 's')
+						.removeClass('good needs-improvement poor')
+						.addClass(results.metrics.speed_index_rating || 'good');
+				}
+			}
+		}
+
+		// Display recommendations
+		function displayRecommendations(recommendations) {
+			if (!recommendations || recommendations.length === 0) {
+				$('.wpwo-recommendations-section').hide();
+				return;
+			}
+
+			$('.wpwo-recommendations-section').show();
+			var $list = $('.wpwo-recommendations-list');
+			$list.empty();
+
+			recommendations.forEach(function(rec) {
+				var severityClass = 'severity-' + rec.severity;
+				var severityLabel = rec.severity === 'high' ? 'Cao' : (rec.severity === 'medium' ? 'Trung bình' : 'Thấp');
+				
+				var solutionsHtml = '';
+				if (rec.solutions && rec.solutions.length > 0) {
+					solutionsHtml = '<ul class="wpwo-rec-solutions">';
+					rec.solutions.forEach(function(solution) {
+						solutionsHtml += '<li>' + solution + '</li>';
+					});
+					solutionsHtml += '</ul>';
+				}
+
+				var autoFixBtn = '';
+				if (rec.auto_fix) {
+					autoFixBtn = '<button type="button" class="button button-small wpwo-auto-fix-btn" data-fix-id="' + rec.auto_fix + '">✨ Tối ưu ngay</button>';
+				}
+
+				var html = '<div class="wpwo-recommendation-card ' + severityClass + '">' +
+					'<div class="wpwo-rec-header">' +
+					'<span class="wpwo-severity-badge">' + severityLabel + '</span>' +
+					'<strong>' + rec.issue + '</strong>' +
+					'</div>' +
+					'<div class="wpwo-rec-description">' + rec.description + '</div>' +
+					solutionsHtml +
+					'<div class="wpwo-rec-actions">' + autoFixBtn + '</div>' +
+					'</div>';
+
+				$list.append(html);
+			});
+
+			// Bind auto-fix button handlers
+			$('.wpwo-auto-fix-btn').on('click', function() {
+				var $btn = $(this);
+				var fixId = $btn.data('fix-id');
+
+				if (!confirm('Bạn có chắc muốn áp dụng tối ưu này? Plugin sẽ tự động bật các tính năng cần thiết.')) {
+					return;
+				}
+
+				$btn.prop('disabled', true).text('Đang áp dụng...');
+
+				$.ajax({
+					url: wpwoAjax.ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpwo_auto_fix',
+						nonce: wpwoAjax.nonce,
+						fix_id: fixId
+					},
+					success: function(response) {
+						$btn.prop('disabled', false).text('✨ Tối ưu ngay');
+
+						if (response.success) {
+							showNotification(response.data.message, 'success');
+							$btn.text('✅ Đã áp dụng').addClass('applied');
+						} else {
+							showNotification('Lỗi: ' + response.data.message, 'error');
+						}
+					},
+					error: function() {
+						$btn.prop('disabled', false).text('✨ Tối ưu ngay');
+						showNotification('Lỗi khi áp dụng tối ưu', 'error');
+					}
+				});
+			});
+		}
+
+		// Load test history
+		function loadTestHistory() {
+			// Get history from localStorage or show from backend
+			$('.wpwo-test-history-section').show();
+			// For now, we'll let PHP handle this on page load
+			// Could be enhanced with AJAX endpoint to get history
+		}
 	});
 
 })(jQuery);
